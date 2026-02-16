@@ -1,0 +1,280 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #007bff;
+    --primary-hover: #0056b3;
+    --danger-color: #dc3545;
+    --danger-hover: #c82333;
+    --light-bg: #f8f9fa;
+    --border-color: #dee2e6;
+    --text-color: #212529;
+    --text-muted: #6c757d;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: rgba(0, 0, 0, 0.1);
+    color: rgba(0, 0, 0, 0.8);
+    line-height: 1.6;
+}
+
+/* Navbar */
+.navbar {
+    background-color: rgb(75, 71, 72);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.navbar h1 {
+    font-size: 1.8rem;
+    color: white;
+    background-color: rgb(75, 71, 72);
+}
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 10rem;
+    background-color: rgb(2, 2, 2);
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10rem;
+    background-color: rgb(75, 71, 72);
+}
+
+.username {
+    position: relative;
+    left: 210px;
+    top: 3px;
+    font-size: 1rem;
+    color: white;
+    font-weight: 500;
+}
+
+.username2 {
+    position: relative;
+    left: 50px;
+    font-size: 1rem;
+    color: orange;
+    font-weight: 500;
+    font-size: 1.5rem;
+}
+
+/* Auth Pages */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, rgb(75, 71, 72) 0%, #b4b4b4 100%);
+}
+
+.auth-form {
+    background-color: rgb(61, 59, 60);
+    padding: 2.5rem;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+}
+
+.auth-form h1 {
+    text-align: center;
+    color: whitesmoke;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+}
+
+.form-group label {
+    color: orange;
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: orange;
+    font-size: 0.95rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+/* Buttons */
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-primary {
+    width: 30%;
+    background-color: rgba(2, 2, 2);
+    color: orange;
+}
+
+.btn-primary-register {
+    width: 40%;
+    background-color: rgba(2, 2, 2);
+    color: orange;
+}
+
+.btn-primary:hover {
+    background-color: rgba(2, 2, 2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(2, 2, 2);
+}
+
+.btn-logout {
+    background-color: var(--danger-color);
+    color: white;
+    font-size: 0.95rem;
+    padding: 0.5rem 1rem;
+}
+
+.btn-logout:hover {
+    background-color: var(--danger-hover);
+}
+
+/* Error Messages */
+.error-message {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    padding: 1rem;
+    border-radius: 5px;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+/* Auth Links */
+.auth-link {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: whitesmoke;
+}
+
+.auth-link a {
+    color: orange;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.auth-link a:hover {
+    color: #db9004;
+    text-decoration: underline;
+}
+
+/* Notes Wrapper */
+.notes-wrapper {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    background-color: rgb(240, 233, 234);
+}
+
+/* Notes Container */
+.notes-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    background-color: rgb(240, 233, 234);
+}
+
+/* Individual Note */
+.note {
+    background-color: rgb(255, 69, 69);
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid var(--primary-color);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.note:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.note h2 {
+    color: black;
+    margin-bottom: 0.8rem;
+    font-size: 1.4rem;
+    word-wrap: break-word;
+}
+
+.note p {
+    color: black;
+    line-height: 1.7;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+}
+
+/* Empty Message */
+.empty-message {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-muted);
+}
+
+.empty-message p {
+    font-size: 1.1rem;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    
+    .btn-logout {
+        width: 100%;
+    }
+    
+    .notes-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .auth-form {
+        margin: 1rem;
+        padding: 2rem;
+    }
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<body>
+<head>
+    <title>Minhas Notas</title>
+    <link rel="stylesheet" href="/static/nlr.css">
+</head>
+    <div class="navbar">
+        <div class="navbar-left">
+            <h1>Minhas Notas</h1>
+        </div>
+        <div class="navbar-right">
+            <span class="username">Bem-vindo,</span>
+            <span class="username2">{{ username }}!</span>
+            <a href="/logout" class="btn btn-logout">Sair</a>
+        </div>
+    </div>
+    
+    <div class="notes-wrapper">
+        <a href="/create" class="btn btn-primary">Criar Nova Nota</a>
+        <div class="notes-container">
+            {% if notes %}
+                {% for note in notes %}
+                    <div class="note">
+                        <h2>{{ note.title }}</h2>
+                        <p>{{ note.content }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-message">
+                    <p>Você não tem notas ainda. Crie sua primeira nota!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
