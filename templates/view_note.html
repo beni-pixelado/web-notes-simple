@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visualizar Nota - Notes</title>
+    <link rel="stylesheet" href="/static/css/notes.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-left">
+            <h1>Visualizar Nota</h1>
+        </div>
+        <div class="navbar-right">
+            <span class="username">Bem-vindo,</span>
+            <span class="username2">{{ username }}!</span>
+            <a href="/logout" class="btn btn-logout">Sair</a>
+        </div>
+    </div>
+
+    <div class="view-note-container">
+        <div class="note-card">
+            <h2 class="note-title">{{ note.title }}</h2>
+            {% if note.image_path %}
+                <div style="margin: 16px 0;">
+                    <img src="{{ note.image_path }}" style="max-width: 100%; max-height: 500px; border-radius: 8px;">
+                </div>
+            {% endif %}
+            <div class="note-content">
+                <pre id="note-content" data-text-color="{{ note.text_color or '#000000' }}" style="white-space: pre-wrap; font-family: inherit;">{{ note.content }}</pre>
+            </div>
+            <div class="note-view-actions" style="margin-bottom: 16px;">
+                <a href="/" class="btn btn-secondary">Voltar</a>
+                <a href="/create" class="btn btn-primary-view">Criar nova</a>
+                <a href="/edit/{{ note.id }}" class="btn btn-primary-view">Editar</a>
+                <a href="/delete/{{ note.id }}" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir esta nota?');">Excluir</a>
+            </div>
+        </div>
+    </div>
+        <script>
+            (function(){
+                const el = document.getElementById('note-content');
+                if(el){
+                    el.style.color = el.dataset.textColor || '#000000';
+                }
+            })();
+        </script>
+</body>
+</html>

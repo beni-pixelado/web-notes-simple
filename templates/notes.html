@@ -3,7 +3,7 @@
 <body>
 <head>
     <title>Minhas Notas</title>
-    <link rel="stylesheet" href="/static/nlr.css">
+    <link rel="stylesheet" href="/static/css/notes.css">
 </head>
     <div class="navbar">
         <div class="navbar-left">
@@ -19,19 +19,35 @@
     <div class="notes-wrapper">
         <a href="/create" class="btn btn-primary">Criar Nova Nota</a>
         <div class="notes-container">
+            <script src="/static/js/notes.js"></script>
             {% if notes %}
                 {% for note in notes %}
                     <div class="note">
-                        <h2>{{ note.title }}</h2>
-                        <p>{{ note.content }}</p>
+                        <a href="/note/{{ note.id }}" class="note-link">
+                            {% if note.image_path %}
+                                <div style="width: 100%; height: 200px; overflow: hidden; border-radius: 8px; margin-bottom: 10px;">
+                                    <img src="{{ note.image_path }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                </div>
+                            {% endif %}
+                            <h2>{{ note.title }}</h2>
+                            <p class="note-snippet" data-text-color="{{ note.text_color or '#000000' }}">{{ note.content[:100] }}{% if note.content|length > 100 %}...{% endif %}</p>
+                        </a>
                     </div>
                 {% endfor %}
             {% else %}
                 <div class="empty-message">
-                    <p>Você não tem notas ainda. Crie sua primeira nota!</p>
+                    <p class="empty-message-text">Você não tem notas ainda. Crie sua primeira nota!</p>
                 </div>
             {% endif %}
         </div>
     </div>
+            <script>
+                (function(){
+                    document.querySelectorAll('.note-snippet').forEach(function(el){
+                        const col = el.dataset.textColor || '#000000';
+                        el.style.color = col;
+                    });
+                })();
+            </script>
 </body>
 </html>

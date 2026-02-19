@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Editar Nota - Notes</title>
+    <link rel="stylesheet" href="/static/css/notes.css">
+</head>
+<body>
+    <div class="page-with-sidebar">
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3>Opções</h3>
+                <label>Cor do texto</label>
+                <div class="color-picker-container">
+                    <button type="button" id="colorButton" class="btn-color-picker" title="Escolher cor"></button>
+                </div>
+                <p class="sidebar-note">A cor escolhida será aplicada ao conteúdo enquanto edita.</p>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <button type="button" id="toggleSidebarBtn" class="btn btn-secondary toggle-sidebar">Opções</button>
+            <div class="container">
+                <h1>Editar Nota</h1>
+                <form method="post" action="/edit/{{ note.id }}" enctype="multipart/form-data">
+                    <input type="hidden" name="note_id" value="{{ note.id }}">
+                    <div class="form-group">
+                        <label for="title">Título:</label>
+                        <input type="text" id="title" name="title" value="{{ note.title }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="content">Conteúdo:</label>
+                        <textarea id="content" name="content" required>{{ note.content }}</textarea>
+                    </div>
+                    <div style="display:none;">
+                        <input type="color" id="text_color" name="text_color" value="{{ note.text_color or '#000000' }}">
+                    </div>
+                    {% if note.image_path %}
+                        <div class="form-group">
+                            <label>Imagem Atual:</label>
+                            <img src="{{ note.image_path }}" style="max-width: 300px; max-height: 300px; border-radius: 8px;">
+                        </div>
+                    {% endif %}
+                    <div class="form-group">
+                        <label for="image">Trocar Imagem:</label>
+                        <input type="file" id="image" name="image" accept="image/*">
+                        <p style="font-size: 0.9em; color: #666;">Opcional: Deixe em branco para manter a imagem atual</p>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Salvar Nota</button>
+                    <a href="/" class="btn btn-secondary">Voltar</a>
+                </form>
+            <script src="/static/js/create_color.js"></script>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
