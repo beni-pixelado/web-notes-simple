@@ -1,7 +1,9 @@
+![License: MIT](https://img.shields.io/badge/License-MIT-FFD700?style=for-the-badge)
 # Web Notes Simple
 
 <img width="1366" height="768" alt="Captura de tela 2026-02-19 180534" src="https://github.com/user-attachments/assets/bb2acbcc-ef68-4591-a771-713cf5d9d942" />
-![Version](https://img.shields.io/github/release/beni-pixelado/web-notes-simple.svg?style=for-the-badge)
+
+![Atualização](https://img.shields.io/badge/V1.0.0-FFD700?style=for-the-badge&logoColor=black)  ![Stars](https://img.shields.io/github/stars/beni-pixelado/web-notes-simple?style=for-the-badge&color=FFD700)
 
 Aplicação web para criar, editar e gerenciar notas pessoais com suporte a imagens e diversas outras funcionalidades.
 
