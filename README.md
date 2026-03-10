@@ -3,18 +3,18 @@
 
 <img width="1366" height="768" alt="Captura de tela 2026-02-19 180534" src="https://github.com/user-attachments/assets/bb2acbcc-ef68-4591-a771-713cf5d9d942" />
 
-![Atualização](https://img.shields.io/badge/V1.0.0-FFD700?style=for-the-badge&logoColor=black)  ![Stars](https://img.shields.io/github/stars/beni-pixelado/web-notes-simple?style=for-the-badge&color=FFD700)
+![Version 1.0.0](https://img.shields.io/badge/V1.0.0-FFD700?style=for-the-badge&logoColor=black)  ![Stars](https://img.shields.io/github/stars/beni-pixelado/web-notes-simple?style=for-the-badge&color=FFD700)
 
-Aplicação web para criar, editar e gerenciar notas pessoais com suporte a imagens e diversas outras funcionalidades.
+Web application to create, edit and manage personal notes with image support and various other features.
 
-## Requisitos
+## Requirements
 
 - Python 3.8+
-- pip (gerenciador de pacotes Python)
+- pip (Python package manager)
 
-## Instalação Rápida
+## Quick Installation
 
-### Option 1: Script Automático (Recomendado)
+### Option 1: Automatic Script (Recommended)
 
 #### Windows (PowerShell)
 ```powershell
@@ -26,20 +26,20 @@ powershell -ExecutionPolicy Bypass -File install.ps1
 install.bat
 ```
 
-Estes scripts vão:
-1. ✓ Verificar se Python está instalado
-2. ✓ Criar um ambiente virtual (venv)
-3. ✓ Instalar todas as dependências
-4. ✓ Exibir instruções para executar
+These scripts will:
+1. ✓ Check if Python is installed
+2. ✓ Create a virtual environment (venv)
+3. ✓ Install all dependencies
+4. ✓ Display instructions to run
 
-### Option 2: Instalação Manual
+### Option 2: Manual Installation
 
-1. **Criar ambiente virtual:**
+1. **Create virtual environment:**
 ```bash
 python -m venv venv
 ```
 
-2. **Ativar ambiente virtual:**
+2. **Activate virtual environment:**
 
 Windows (PowerShell):
 ```powershell
@@ -56,88 +56,60 @@ Linux/Mac:
 source venv/bin/activate
 ```
 
-3. **Instalar dependências:**
+3. **Install dependencies:**
 ```bash
 pip install -r requirements.txt
 ```
 
-## Executar o Servidor
+## Run the Server
 
 ```bash
 python -m uvicorn main:app --host 127.0.0.1 --port 8000 --reload
 ```
+or acess "start.xxx"
 
-Depois acesse no navegador:
-- **Criar Conta:** http://127.0.0.1:8000/register
-- **Fazer Login:** http://127.0.0.1:8000/login
+Then access in the browser **http://127.0.0.1:8000**
 
-## Estrutura do Projeto
+**structure in STRUCTURE.md**
 
-```
-web-notes-simple/
-├── main.py                 # Aplicação FastAPI principal
-├── requirements.txt        # Dependências Python
-├── install.ps1            # Script de instalação (PowerShell)
-├── install.bat            # Script de instalação (CMD)
-├── templates/             # Arquivos HTML
-│   ├── create.html       # Página para criar nota
-│   ├── edit.html         # Página para editar nota
-│   ├── login.html        # Página de login
-│   ├── register.html     # Página de registro
-│   ├── notes.html        # Página inicial
-│   └── view_note.html    # Página para ver nota
-├── static/               # Arquivos estáticos
-│   ├── css/
-│   │   ├── notes.css     # Estilos principais
-│   │   ├── login.css     # Estilos de login
-│   │   └── register.css  # Estilos de registration
-│   └── js/
-│       ├── create_color.js # Lógica de seletor de cores
-│       ├── create.js      # Scripts para criar nota
-│       └── notes.js       # Scripts gerais
-├── uploads/              # Pasta para imagens de notas
-└── users.db             # Banco de dados SQLite
+## Dependencies
 
-```
+- **fastapi** - Modern web framework
+- **uvicorn** - ASGI server
+- **jinja2** - Template engine
+- **pydantic** - Data validation
+- **python-multipart** - File upload support
 
-## Dependências
+## Features
 
-- **fastapi** - Framework web moderno
-- **uvicorn** - Servidor ASGI
-- **jinja2** - Engine de templates
-- **pydantic** - Validação de dados
-- **python-multipart** - Suporte para upload de arquivos
+✓ Create, edit and delete notes
+✓ Upload images for notes
+✓ Customize text color
+✓ User authentication
+✓ SQLite database
+✓ Responsive interface
 
-## Recursos
+## Development Notes
 
-✓ Criar, editar e deletar notas
-✓ Upload de imagens para notas
-✓ Customizar cor do texto
-✓ Autenticação de usuário
-✓ Banco de dados SQLite
-✓ Interface responsiva
+- The database is created automatically on first run
+- Passwords are saved with SHA-256 hash
+- Uploaded images are stored in the `uploads/` folder
+- Use `--reload` for development (reloads on each change)
 
-## Notas de Desenvolvimento
+## Troubleshooting
 
-- O banco de dados é criado automaticamente na primeira execução
-- As quatro senhas são salvas com hash SHA-256
-- As imagens uploadadas ficam na pasta `uploads/`
-- Use `--reload` para desenvolvimento (recarrega a cada mudança)
+**Error: "Python not found"**
+- Install Python from https://www.python.org/
+- Make sure it's in the Windows PATH
 
-## Solução de Problemas
+**Error: "Port 8000 already in use"**
+- Use another port: `--port 8001`
+- Or terminate the process using port 8000
 
-**Erro: "Python não encontrado"**
-- Instale Python de https://www.python.org/
-- Certifique-se de que está no PATH do Windows
+**Virtual environment not active**
+- Make sure to run the correct activation command for your OS
+- In PowerShell, you may need to change the execution policy
 
-**Erro: "Porta 8000 já em uso"**
-- Use outra porta: `--port 8001`
-- Ou encerre o processo usando a porta 8000
+## License
 
-**Virtual environment não ativa**
-- Certifique-se de executar o comando de ativação correto para seu SO
-- No PowerShell, pode ser necessário alterar a política de execução
-
-## Licença
-
-Este projeto é fornecido como está, sem garantias.
+This project is provided as is, without warranties.

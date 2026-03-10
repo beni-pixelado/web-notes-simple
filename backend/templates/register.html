@@ -7,7 +7,7 @@
 <body>
     <div class="auth-container">
         <div class="auth-form">
-            <h1>Cadastro</h1>
+            <h1>Registration</h1>
             
             {% if error %}
                 <div class="error-message">{{ error }}</div>
@@ -15,7 +15,7 @@
             
             <form method="POST" action="/register">
                 <div class="form-group">
-                    <label for="username">Usuário:</label>
+                    <label for="username">User:</label>
                     <input type="text" id="username" name="username" required>
                 </div>
                 
@@ -25,20 +25,20 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="password">Senha:</label>
+                    <label for="password">Password:</label>
                     <input type="password" id="password" name="password" required minlength="6">
                 </div>
                 
                 <div class="form-group">
-                    <label for="password_confirm">Confirmar Senha:</label>
+                    <label for="password_confirm">Confirm Password:</label>
                     <input type="password" id="password_confirm" name="password_confirm" required>
                 </div>
                 
-                <button type="submit" class="btn btn-primary-register">Cadastrar</button>
+                <button type="submit" class="btn btn-primary-register">Register</button>
             </form>
             
             <div class="auth-link">
-                <p>Já tem uma conta? <a href="/login">Faça login aqui</a></p>
+                <p>Already have an account? <a href="/login">Login here</a></p>
             </div>
         </div>
     </div>

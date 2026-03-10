@@ -4,7 +4,7 @@ function enviar() {
   const file = input.files[0]
 
   if (!file) {
-    alert("Escolhe uma imagem primeiro")
+    alert("Choose an image first")
     return
   }
 
@@ -16,4 +16,3 @@ function enviar() {
     body: form
   })
 }
-

@@ -1,34 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Editar Nota - Notes</title>
+    <title>Edit Note - Notes</title>
     <link rel="stylesheet" href="/static/css/notes.css">
 </head>
 <body>
     <div class="page-with-sidebar">
         <aside class="sidebar">
             <div class="sidebar-section">
-                <h3>Opções</h3>
-                <label>Cor do texto</label>
+                <h3>Options</h3>
+                <label>Text color</label>
                 <div class="color-picker-container">
-                    <button type="button" id="colorButton" class="btn-color-picker" title="Escolher cor"></button>
+                    <button type="button" id="colorButton" class="btn-color-picker" title="Choose color"></button>
                 </div>
-                <p class="sidebar-note">A cor escolhida será aplicada ao conteúdo enquanto edita.</p>
+                <p class="sidebar-note">The chosen color will be applied to the content while editing.</p>
             </div>
         </aside>
 
         <main class="main-content">
-            <button type="button" id="toggleSidebarBtn" class="btn btn-secondary toggle-sidebar">Opções</button>
+            <button type="button" id="toggleSidebarBtn" class="btn btn-secondary toggle-sidebar">Options</button>
             <div class="container">
-                <h1>Editar Nota</h1>
+                <h1>Edit Note</h1>
                 <form method="post" action="/edit/{{ note.id }}" enctype="multipart/form-data">
                     <input type="hidden" name="note_id" value="{{ note.id }}">
                     <div class="form-group">
-                        <label for="title">Título:</label>
+                        <label for="title">Title:</label>
                         <input type="text" id="title" name="title" value="{{ note.title }}" required>
                     </div>
                     <div class="form-group">
-                        <label for="content">Conteúdo:</label>
+                        <label for="content">Content:</label>
                         <textarea id="content" name="content" required>{{ note.content }}</textarea>
                     </div>
                     <div style="display:none;">
@@ -36,17 +36,17 @@
                     </div>
                     {% if note.image_path %}
                         <div class="form-group">
-                            <label>Imagem Atual:</label>
+                            <label>Current Image:</label>
                             <img src="{{ note.image_path }}" style="max-width: 300px; max-height: 300px; border-radius: 8px;">
                         </div>
                     {% endif %}
                     <div class="form-group">
-                        <label for="image">Trocar Imagem:</label>
+                        <label for="image">Change Image:</label>
                         <input type="file" id="image" name="image" accept="image/*">
-                        <p style="font-size: 0.9em; color: #666;">Opcional: Deixe em branco para manter a imagem atual</p>
+                        <p style="font-size: 0.9em; color: #666;">Optional: Leave blank to keep the current image</p>
                     </div>
-                    <button type="submit" class="btn btn-primary">Salvar Nota</button>
-                    <a href="/" class="btn btn-secondary">Voltar</a>
+                    <button type="submit" class="btn btn-primary">Save Note</button>
+                    <a href="/" class="btn btn-secondary">Back</a>
                 </form>
             <script src="/static/js/create_color.js"></script>
             </div>

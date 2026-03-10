@@ -1,30 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Criar Nota - Notes</title>
+    <title>Create Note - Notes</title>
     <link rel="stylesheet" href="/static/css/notes.css">
 </head>
 <body>
     <div class="navbar">
         <div class="navbar-left">
-            <h1>Criar Nota</h1>
+            <h1>Create Note</h1>
         </div>
         <div class="navbar-right">
-            <span class="username">Bem-vindo,</span>
+            <span class="username">Welcome,</span>
             <span class="username2">{{ username }}!</span>
-            <a href="/logout" class="btn btn-logout">Sair</a>
+            <a href="/logout" class="btn btn-logout">Logout</a>
         </div>
     </div>
     
     <div class="page-with-sidebar">
         <aside class="sidebar">
             <div class="sidebar-section">
-                <h3>Opções</h3>
-                <label>Cor do texto</label>
+                <h3>Options</h3>
+                <label>Text color</label>
                 <div class="color-picker-container">
-                    <button type="button" id="colorButton" class="btn-color-picker" title="Escolher cor"></button>
+                    <button type="button" id="colorButton" class="btn-color-picker" title="Choose color"></button>
                 </div>
-                <p class="sidebar-note">A cor escolhida será aplicada ao conteúdo enquanto edita.</p>
+                <p class="sidebar-note">The chosen color will be applied to the content while editing.</p>
             </div>
         </aside>
 
@@ -36,24 +36,24 @@
                         <div class="error-message">{{ error }}</div>
                     {% endif %}
                     <div class="form-group">
-                        <label for="title">Título:</label>
+                        <label for="title">Title:</label>
                         <input type="text" id="title" name="title" required>
                     </div>
                     <div class="form-group-context">
-                        <label for="content">Conteúdo:</label>
+                        <label for="content">Content:</label>
                         <textarea  id="content" name="content" rows="20" style="min-width: 100%; max-width:100%;" required></textarea>
                     </div>
                     <div style="display:none;">
                         <input type="color" id="text_color" name="text_color" value="#000000">
                     </div>
                     <div class="form-group-file">
-                        <label for="image">Imagem:</label>
+                        <label for="image">Image:</label>
                         <input class="file-input" type="file" id="image" name="image" accept="image/*">
-                        <p style="font-size: 0.9em; color: #666;">Opcional: Escolha uma imagem para a sua nota</p>
+                        <p style="font-size: 0.9em; color: #666;">Optional: Choose an image for your note</p>
                     </div>
                     <div class="form-group-create">
-                        <button type="submit" class="btn btn-primary-create">Salvar Nota</button>
-                        <a href="/" class="btn btn-secondary">Voltar</a>
+                        <button type="submit" class="btn btn-primary-create">Save Note</button>
+                        <a href="/" class="btn btn-secondary">Back</a>
                     </div>
                 </form>
             </div>

@@ -1,6 +1,6 @@
-// Espera a página carregar
+// Wait for the page to load
 document.addEventListener("DOMContentLoaded", () => {
-  const notes = document.querySelectorAll(".note"); // pega todas as notas
+  const notes = document.querySelectorAll(".note"); // get all notes
   const maxLines = 7;
 
   notes.forEach(nota => {

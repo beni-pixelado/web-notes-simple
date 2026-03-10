@@ -10,19 +10,19 @@ import os
 import shutil
 import time
 from pathlib import Path
-#python -m uvicorn main:app --host 127.0.0.1 --port 8000 --reload
-#acess in web: http://127.0.0.1:8000
+#python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000 --reload
+#access in web: http://127.0.0.1:8000
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="static"), name="static")
-app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
-templates = Jinja2Templates(directory="templates")
+app.mount("/static", StaticFiles(directory=os.path.join(os.path.dirname(__file__), "../frontend/static")), name="static")
+app.mount("/uploads", StaticFiles(directory=os.path.join(os.path.dirname(__file__), "uploads")), name="uploads")
+templates = Jinja2Templates(directory=os.path.join(os.path.dirname(__file__), "templates"))
 
-# Criar pasta uploads se não existir
+# Create uploads folder if it doesn't exist
 upload_dir = Path("uploads")
 upload_dir.mkdir(exist_ok=True)
 
-# Inicializar banco de dados
+# Initialize database
 def init_db():
     conn = sqlite3.connect("users.db")
     c = conn.cursor()
@@ -45,17 +45,17 @@ def init_db():
         )
     """)
     
-    # Adicionar coluna image_path se não existir (para bancos de dados antigos)
+    # Add image_path column if it doesn't exist (for old databases)
     try:
         c.execute("ALTER TABLE notes ADD COLUMN image_path TEXT")
     except sqlite3.OperationalError:
-        # Coluna já existe
+        # Column already exists
         pass
-    # Adicionar coluna text_color se não existir
+    # Add text_color column if it doesn't exist
     try:
         c.execute("ALTER TABLE notes ADD COLUMN text_color TEXT DEFAULT '#000000'")
     except sqlite3.OperationalError:
-        # Coluna já existe
+        # Column already exists
         pass
     
     conn.commit()
@@ -63,25 +63,25 @@ def init_db():
 
 init_db()
 
-# Hash de senha
+# Password hash
 def hash_password(password: str) -> str:
     return hashlib.sha256(password.encode()).hexdigest()
 
-# Verificar sessão
+# Verify session
 def verify_session(session_token: Optional[str] = Cookie(None)) -> str:
     if not session_token:
-        raise HTTPException(status_code=401, detail="Não autenticado")
+        raise HTTPException(status_code=401, detail="Not authenticated")
     return session_token
 
-# Obter user_id da sessão
+# Get user_id from session
 def get_user_id(session_token: str) -> int:
-    # Neste exemplo simples, o token é o user_id
+    # In this simple example, the token is the user_id
     try:
         return int(session_token)
     except:
-        raise HTTPException(status_code=401, detail="Sessão inválida")
+        raise HTTPException(status_code=401, detail="Invalid session")
 
-# Obter username da sessão
+# Get username from session
 def get_username(session_token: str) -> str:
     try:
         user_id = get_user_id(session_token)
@@ -92,15 +92,15 @@ def get_username(session_token: str) -> str:
         conn.close()
         return user[0] if user else ""
     except:
-        raise HTTPException(status_code=401, detail="Sessão inválida")
+        raise HTTPException(status_code=401, detail="Invalid session")
 
-# Modelos
+# Models
 class User(BaseModel):
     username: str
     email: str
     password: str
 
-# Rotas
+# Routes
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request, session_token: Optional[str] = Cookie(None)):
     if not session_token:
@@ -160,9 +160,9 @@ async def login_post(request: Request, username: str = Form(), password: str = F
         response.set_cookie(key="session_token", value=str(user[0]), httponly=True, max_age=86400)
         return response
     else:
-        return templates.TemplateResponse("login.html", {
+        return templates.TemplateResponse("backend/login.html", {
             "request": request,
-            "error": "Usuário ou senha inválidos"
+            "error": "Invalid username or password"
         })
 
 @app.get("/register", response_class=HTMLResponse)
@@ -181,13 +181,13 @@ async def register_post(request: Request, username: str = Form(), email: str = F
     if password != password_confirm:
         return templates.TemplateResponse("register.html", {
             "request": request,
-            "error": "As senhas não coincidem"
+            "error": "Passwords do not match"
         })
     
     if len(password) < 6:
         return templates.TemplateResponse("register.html", {
             "request": request,
-            "error": "A senha deve ter no mínimo 6 caracteres"
+            "error": "Password must be at least 6 characters"
         })
     
     hashed_password = hash_password(password)
@@ -208,9 +208,9 @@ async def register_post(request: Request, username: str = Form(), email: str = F
     except sqlite3.IntegrityError as e:
         conn.close()
         if "username" in str(e):
-            error = "Este usuário já existe"
+            error = "This user already exists"
         else:
-            error = "Este email já está registrado"
+            error = "This email is already registered"
         
         return templates.TemplateResponse("register.html", {
             "request": request,
@@ -242,7 +242,7 @@ async def create_note_post(request: Request, session_token: Optional[str] = Cook
 
     try:
         user_id = get_user_id(session_token)
-        # Usar form-data para pegar todos os dados
+        # Use form-data to get all data
         form_data = await request.form()
         title = form_data.get("title", "")
         content = form_data.get("content", "")
@@ -251,10 +251,10 @@ async def create_note_post(request: Request, session_token: Optional[str] = Cook
         image_path = None
         text_color = form_data.get("text_color") or "#000000"
         
-        # Processar upload de imagem
+        # Process image upload
         if image and image.filename:
             try:
-                # Salvar arquivo
+                # Save file
                 file_extension = os.path.splitext(image.filename)[1]
                 unique_filename = f"note_{user_id}_{int(time.time())}{file_extension}"
                 file_path = f"uploads/{unique_filename}"
@@ -264,8 +264,8 @@ async def create_note_post(request: Request, session_token: Optional[str] = Cook
                 
                 image_path = f"/{file_path}"
             except Exception as img_error:
-                print(f"Erro ao salvar imagem: {img_error}")
-                # Continuar mesmo se a imagem falhar
+                print(f"Error saving image: {img_error}")
+                # Continue even if image fails
         
         conn = sqlite3.connect("users.db")
         c = conn.cursor()
@@ -276,12 +276,12 @@ async def create_note_post(request: Request, session_token: Optional[str] = Cook
 
         return RedirectResponse(url="/", status_code=302)
     except Exception as e:
-        print(f"Erro ao criar nota: {str(e)}")
+        print(f"Error creating note: {str(e)}")
         try:
             username = get_username(session_token) if session_token else ""
         except:
             username = ""
-        return templates.TemplateResponse("create.html", {"request": request, "username": username, "error": f"Erro ao salvar a nota: {str(e)}"})
+        return templates.TemplateResponse("create.html", {"request": request, "username": username, "error": f"Error saving note: {str(e)}"})
 
 
 @app.get("/note/{note_id}", response_class=HTMLResponse)
@@ -298,10 +298,10 @@ async def view_note_page(request: Request, note_id: int, session_token: Optional
         conn.close()
 
         if not note:
-            raise HTTPException(status_code=404, detail="Nota não encontrada")
+            raise HTTPException(status_code=404, detail="Note not found")
 
         if note[1] != user_id:
-            raise HTTPException(status_code=403, detail="Acesso negado")
+            raise HTTPException(status_code=403, detail="Access denied")
 
         note_dict = {"id": note[0], "title": note[2], "content": note[3], "image_path": note[4], "text_color": note[5] if len(note) > 5 and note[5] else "#000000"}
 
@@ -324,12 +324,12 @@ async def delete_note(note_id: int, session_token: Optional[str] = Cookie(None))
         note = c.fetchone()
 
         if not note:
-            raise HTTPException(status_code=404, detail="Nota não encontrada")
+            raise HTTPException(status_code=404, detail="Note not found")
 
         if note[0] != user_id:
-            raise HTTPException(status_code=403, detail="Acesso negado")
+            raise HTTPException(status_code=403, detail="Access denied")
 
-        # Deletar arquivo de imagem se existir
+        # Delete image file if exists
         if note[1] and os.path.exists(note[1][1:]):  # Remove leading /
             os.remove(note[1][1:])
 
@@ -358,10 +358,10 @@ async def edit_note_page(request: Request, note_id: int, session_token: Optional
         conn.close()
 
         if not note:
-            raise HTTPException(status_code=404, detail="Nota não encontrada")
+            raise HTTPException(status_code=404, detail="Note not found")
 
         if note[1] != user_id:
-            raise HTTPException(status_code=403, detail="Acesso negado")
+            raise HTTPException(status_code=403, detail="Access denied")
 
         note_dict = {"id": note[0], "title": note[2], "content": note[3], "image_path": note[4], "text_color": note[5] if len(note) > 5 and note[5] else "#000000"}
 
@@ -378,7 +378,7 @@ async def edit_note_post(request: Request, note_id: int, session_token: Optional
 
     try:
         user_id = get_user_id(session_token)
-        # Usar form-data para pegar todos os dados
+        # Use form-data to get all data
         form_data = await request.form()
         title = form_data.get("title", "")
         content = form_data.get("content", "")
@@ -387,28 +387,28 @@ async def edit_note_post(request: Request, note_id: int, session_token: Optional
         conn = sqlite3.connect("users.db")
         c = conn.cursor()
         
-        # Verificar se a nota existe e pertence ao usuário
+        # Check if the note exists and belongs to the user
         c.execute("SELECT user_id, image_path FROM notes WHERE id = ?", (note_id,))
         note = c.fetchone()
         
         if not note:
-            raise HTTPException(status_code=404, detail="Nota não encontrada")
+            raise HTTPException(status_code=404, detail="Note not found")
         
         if note[0] != user_id:
-            raise HTTPException(status_code=403, detail="Acesso negado")
+            raise HTTPException(status_code=403, detail="Access denied")
         
-        image_path = note[1]  # Manter imagem anterior caso não seja feito upload
+        image_path = note[1]  # Keep previous image if no upload
         prev_text_color = note[2] if len(note) > 2 and note[2] else "#000000"
         new_text_color = form_data.get("text_color") or prev_text_color
         
-        # Processar novo upload de imagem
+        # Process new image upload
         if image and image.filename:
             try:
-                # Deletar imagem anterior se existir
+                # Delete previous image if exists
                 if image_path and os.path.exists(image_path[1:]):  # Remove leading /
                     os.remove(image_path[1:])
                 
-                # Salvar novo arquivo
+                # Save new file
                 file_extension = os.path.splitext(image.filename)[1]
                 unique_filename = f"note_{user_id}_{int(time.time())}{file_extension}"
                 file_path = f"uploads/{unique_filename}"
@@ -418,10 +418,10 @@ async def edit_note_post(request: Request, note_id: int, session_token: Optional
                 
                 image_path = f"/{file_path}"
             except Exception as img_error:
-                print(f"Erro ao salvar imagem: {img_error}")
-                # Continuar mesmo se a imagem falhar
+                print(f"Error saving image: {img_error}")
+                # Continue even if image fails
         
-        # Atualizar a nota (inclui text_color)
+        # Update the note (includes text_color)
         c.execute("UPDATE notes SET title = ?, content = ?, image_path = ?, text_color = ? WHERE id = ?", 
               (title, content, image_path, new_text_color, note_id))
         conn.commit()
@@ -431,6 +431,6 @@ async def edit_note_post(request: Request, note_id: int, session_token: Optional
     except HTTPException:
         raise
     except Exception as e:
-        print(f"Erro ao editar nota: {str(e)}")
+        print(f"Error editing note: {str(e)}")
         return RedirectResponse(url="/", status_code=302)
 

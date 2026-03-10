@@ -1,12 +1,12 @@
-versao 0.2 log
+version 0.2 log
 
-desde a ultima versao foi adicionado uma sidebar e no qual tem a funcionalidade de
-trocar a cor dos textos marcados como conteudo
+since the last version a sidebar was added and in which has the functionality of
+changing the color of texts marked as content
 
-todas as paginas foram otimizadas para muito menos lag
+all pages were optimized for much less lag
 
-interface otimimizada e bancos de dados persistentes tambem foram adicionados
+optimized interface and persistent databases were also added
 
-a funçao de adicionar imagens tambem foi inserida
+the function to add images was also inserted
 
-entre outras coisas
+among other things

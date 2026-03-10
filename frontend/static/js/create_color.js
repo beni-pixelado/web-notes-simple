@@ -1,4 +1,4 @@
-// Aplica cor ao textarea e mantém valor no input hidden (envia o value no form)
+// Apply color to textarea and keep value in hidden input (sends the value in the form)
 (function(){
   const colorInput = document.getElementById('text_color')
   const textarea = document.getElementById('content')
@@ -8,7 +8,7 @@
 
   if (!colorInput || !textarea || !colorButton) return
 
-  // Toggle sidebar quando clicado (se existir)
+  // Toggle sidebar when clicked (if exists)
   if (toggleBtn && sidebar) {
     toggleBtn.addEventListener('click', function(e){
       e.preventDefault()
@@ -16,11 +16,11 @@
     })
   }
 
-  // Aplica cor inicial
+  // Apply initial color
   textarea.style.color = colorInput.value
   colorButton.style.backgroundColor = colorInput.value
 
-  // Abre o picker de cores ao clicar no botão
+  // Open color picker when button is clicked
   colorButton.addEventListener('click', function(e){
     e.preventDefault()
     colorInput.click()
