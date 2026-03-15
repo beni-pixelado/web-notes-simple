@@ -1,0 +1,37 @@
+{
+  "name": "Python Backend Dev",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.black-formatter",
+        "ms-toolsai.jupyter",
+
+        "ms-azuretools.vscode-docker",
+
+        "batisteo.vscode-django",
+        "ms-python.isort",
+
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+
+        "github.copilot",
+        "github.copilot-chat",
+
+        "eamodio.gitlens",
+        "github.vscode-github-actions",
+
+        "rangav.vscode-thunder-client",
+
+        "mtxr.sqltools",
+        "mtxr.sqltools-driver-pg",
+
+        "PKief.material-icon-theme",
+        "qwtel.sqlite-viewer"
+      ]
+    }
+  }
+}
