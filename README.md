@@ -3,7 +3,7 @@
 
 <img width="1366" height="768" alt="Captura de tela 2026-02-19 180534" src="https://github.com/user-attachments/assets/bb2acbcc-ef68-4591-a771-713cf5d9d942" />
 
-![Version 1.1.1](https://img.shields.io/badge/V1.0.0-FFD700?style=for-the-badge&logoColor=black)  ![Stars](https://img.shields.io/github/stars/beni-pixelado/web-notes-simple?style=for-the-badge&color=FFD700)
+![Version 1.1.1](https://img.shields.io/badge/V1.1.1-FFD700?style=for-the-badge&logoColor=black)  ![Stars](https://img.shields.io/github/stars/beni-pixelado/web-notes-simple?style=for-the-badge&color=FFD700)
 
 Web application to create, edit and manage personal notes with image support and various other features.
 
