@@ -1,22 +1,24 @@
 from fastapi import FastAPI, Request, HTTPException, Depends, Form, Cookie
 from fastapi.responses import HTMLResponse, RedirectResponse
+from passlib.context import CryptContext
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from typing import Optional
 import sqlite3
-import hashlib
 import os
 import shutil
 import time
 from pathlib import Path
-#python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000 --reload
-#access in web: http://127.0.0.1:8000
+#python -m uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
+#access in web: http://0.0.0.0:8000
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory=os.path.join(os.path.dirname(__file__), "../frontend/static")), name="static")
 app.mount("/uploads", StaticFiles(directory=os.path.join(os.path.dirname(__file__), "uploads")), name="uploads")
 templates = Jinja2Templates(directory=os.path.join(os.path.dirname(__file__), "templates"))
+BASE_DIR = os.path.dirname(__file__)
+DB_PATH = os.path.join(BASE_DIR, "users.db")
 
 # Create uploads folder if it doesn't exist
 upload_dir = Path("uploads")
@@ -24,7 +26,7 @@ upload_dir.mkdir(exist_ok=True)
 
 # Initialize database
 def init_db():
-    conn = sqlite3.connect("users.db")
+    conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     c.execute("""
         CREATE TABLE IF NOT EXISTS users (
@@ -64,8 +66,13 @@ def init_db():
 init_db()
 
 # Password hash
-def hash_password(password: str) -> str:
-    return hashlib.sha256(password.encode()).hexdigest()
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def hash_password(password):
+    return pwd_context.hash(password.encode("utf-8")[:72])
+
+def verify_password(plain_password, hashed_password):
+    return pwd_context.verify(plain_password.encode("utf-8")[:72], hashed_password)
 
 # Verify session
 def verify_session(session_token: Optional[str] = Cookie(None)) -> str:
@@ -85,7 +92,7 @@ def get_user_id(session_token: str) -> int:
 def get_username(session_token: str) -> str:
     try:
         user_id = get_user_id(session_token)
-        conn = sqlite3.connect("users.db")
+        conn = sqlite3.connect(DB_PATH)
         c = conn.cursor()
         c.execute("SELECT username FROM users WHERE id = ?", (user_id,))
         user = c.fetchone()
@@ -108,7 +115,7 @@ async def home(request: Request, session_token: Optional[str] = Cookie(None)):
     
     try:
         user_id = get_user_id(session_token)
-        conn = sqlite3.connect("users.db")
+        conn = sqlite3.connect(DB_PATH)
         c = conn.cursor()
         c.execute("SELECT username FROM users WHERE id = ?", (user_id,))
         user = c.fetchone()
@@ -133,6 +140,8 @@ async def home(request: Request, session_token: Optional[str] = Cookie(None)):
         })
     except:
         return RedirectResponse(url="/login", status_code=302)
+        response.delete_cookie("session_token")
+        return response 
 
 @app.get("/login", response_class=HTMLResponse)
 async def login_page(request: Request, session_token: Optional[str] = Cookie(None)):
@@ -147,20 +156,21 @@ async def login_page(request: Request, session_token: Optional[str] = Cookie(Non
 
 @app.post("/login", response_class=HTMLResponse)
 async def login_post(request: Request, username: str = Form(), password: str = Form()):
-    hashed_password = hash_password(password)
-    
-    conn = sqlite3.connect("users.db")
+    # Conecta no banco
+    conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    c.execute("SELECT id FROM users WHERE username = ? AND password = ?", (username, hashed_password))
+    c.execute("SELECT id, password FROM users WHERE username = ?", (username,))
     user = c.fetchone()
     conn.close()
-    
-    if user:
+
+    # Verifica se o usuário existe e se a senha confere
+    if user and verify_password(password, user[1]):
+        user_id = user[0]
         response = RedirectResponse(url="/", status_code=302)
-        response.set_cookie(key="session_token", value=str(user[0]), httponly=True, max_age=86400)
+        response.set_cookie(key="session_token", value=str(user_id), httponly=True, max_age=86400)
         return response
     else:
-        return templates.TemplateResponse("backend/login.html", {
+        return templates.TemplateResponse("login.html", {
             "request": request,
             "error": "Invalid username or password"
         })
@@ -192,7 +202,7 @@ async def register_post(request: Request, username: str = Form(), email: str = F
     
     hashed_password = hash_password(password)
     
-    conn = sqlite3.connect("users.db")
+    conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     
     try:
@@ -253,6 +263,14 @@ async def create_note_post(request: Request, session_token: Optional[str] = Cook
         
         # Process image upload
         if image and image.filename:
+
+            if not image.filename.lower().endswith((".png", ".jpg", ".jpeg")):
+               return templates.TemplateResponse("create.html", {
+            "request": request,
+            "username": get_username(session_token),
+            "error": "Only PNG, JPG and JPEG files are allowed"
+            })
+
             try:
                 # Save file
                 file_extension = os.path.splitext(image.filename)[1]
@@ -267,7 +285,7 @@ async def create_note_post(request: Request, session_token: Optional[str] = Cook
                 print(f"Error saving image: {img_error}")
                 # Continue even if image fails
         
-        conn = sqlite3.connect("users.db")
+        conn = sqlite3.connect(DB_PATH)
         c = conn.cursor()
         c.execute("INSERT INTO notes (user_id, title, content, image_path, text_color) VALUES (?, ?, ?, ?, ?)", 
               (user_id, title, content, image_path, text_color))
@@ -291,7 +309,7 @@ async def view_note_page(request: Request, note_id: int, session_token: Optional
 
     try:
         user_id = get_user_id(session_token)
-        conn = sqlite3.connect("users.db")
+        conn = sqlite3.connect(DB_PATH)
         c = conn.cursor()
         c.execute("SELECT id, user_id, title, content, image_path, text_color FROM notes WHERE id = ?", (note_id,))
         note = c.fetchone()
@@ -318,7 +336,7 @@ async def delete_note(note_id: int, session_token: Optional[str] = Cookie(None))
 
     try:
         user_id = get_user_id(session_token)
-        conn = sqlite3.connect("users.db")
+        conn = sqlite3.connect(DB_PATH)
         c = conn.cursor()
         c.execute("SELECT user_id, image_path, text_color FROM notes WHERE id = ?", (note_id,))
         note = c.fetchone()
@@ -351,7 +369,7 @@ async def edit_note_page(request: Request, note_id: int, session_token: Optional
 
     try:
         user_id = get_user_id(session_token)
-        conn = sqlite3.connect("users.db")
+        conn = sqlite3.connect(DB_PATH)
         c = conn.cursor()
         c.execute("SELECT id, user_id, title, content, image_path, text_color FROM notes WHERE id = ?", (note_id,))
         note = c.fetchone()
@@ -384,7 +402,7 @@ async def edit_note_post(request: Request, note_id: int, session_token: Optional
         content = form_data.get("content", "")
         image = form_data.get("image")
         
-        conn = sqlite3.connect("users.db")
+        conn = sqlite3.connect(DB_PATH)
         c = conn.cursor()
         
         # Check if the note exists and belongs to the user

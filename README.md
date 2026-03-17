@@ -1,115 +1,137 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-FFD700?style=for-the-badge)
-# Web Notes Simple
+# 📝 Web Notes Simple
 
-<img width="1366" height="768" alt="Captura de tela 2026-02-19 180534" src="https://github.com/user-attachments/assets/bb2acbcc-ef68-4591-a771-713cf5d9d942" />
+<img width="1366" height="768" alt="preview" src="https://github.com/user-attachments/assets/bb2acbcc-ef68-4591-a771-713cf5d9d942" />
 
-![Version 1.1.1](https://img.shields.io/badge/V1.1.1-FFD700?style=for-the-badge&logoColor=black)  ![Stars](https://img.shields.io/github/stars/beni-pixelado/web-notes-simple?style=for-the-badge&color=FFD700)
+![Version 1.2.0](https://img.shields.io/badge/V1.2.0-FFD700?style=for-the-badge&logoColor=black)
+![Stars](https://img.shields.io/github/stars/beni-pixelado/web-notes-simple?style=for-the-badge&color=FFD700)
 
-Web application to create, edit and manage personal notes with image support and various other features.
+A simple and modern web application to create, edit and manage personal notes — now with improved architecture, security and development environment.
 
-## Requirements
+---
+
+## 🚀 What's New (v1.2.0)
+
+- 🏗️ Improved project structure and organization  
+- 🔐 Password hashing with **bcrypt (passlib)**  
+- 🍪 Secure session cookies (HTTP-only + expiration)  
+- 🖼️ Image upload validation (basic protection)  
+- 🐳 Docker support added  
+- 🧪 Devcontainer configured for consistent development  
+- 🛠️ Makefile for easier commands  
+- ⚙️ Environment configuration support (`.env`)  
+
+---
+
+## ⚙️ Requirements
 
 - Python 3.8+
-- pip (Python package manager)
+- pip
+- (Optional) Docker
 
-## Quick Installation
+---
 
-### Option 1: Automatic Script (Recommended)
+## ⚡ Quick Start (Recommended)
 
-#### Windows (PowerShell)
-```powershell
-powershell -ExecutionPolicy Bypass -File install.ps1
-```
+This project includes a fully configured development environment.
 
-#### Windows (CMD)
-```cmd
-install.bat
-```
+### 🧪 Option 1: Devcontainer (Best Experience)
 
-These scripts will:
-1. ✓ Check if Python is installed
-2. ✓ Create a virtual environment (venv)
-3. ✓ Install all dependencies
-4. ✓ Display instructions to run
+1. Open the project in VS Code  
+2. Reopen in container when prompted  
 
-### Option 2: Manual Installation
+✅ All dependencies and tools are automatically installed  
 
-1. **Create virtual environment:**
+### 🐳 Option 2: Docker
+
 ```bash
-python -m venv venv
+make docker-build
+make docker-run
 ```
+### Option 3: Manual (optional)
 
-2. **Activate virtual environment:**
+Only needed if you are not using Devcontainer or Docker:
 
-Windows (PowerShell):
-```powershell
-.\venv\Scripts\Activate.ps1
-```
-
-Windows (CMD):
-```cmd
-venv\Scripts\activate.bat
-```
-
-Linux/Mac:
-```bash
-source venv/bin/activate
-```
-
-3. **Install dependencies:**
-```bash
 pip install -r requirements.txt
+python -m uvicorn backend.main:app --reload
+
+## To run the project
+
+Only need run in terminal
+``` bash
+make run
+```
+or
+``` bash
+python -m uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-## Run the Server
+## 🔐 Security
 
-```bash
-python -m uvicorn main:app --host 127.0.0.1 --port 8000 --reload
-```
-or acess "start.xxx"
+Passwords hashed using bcrypt
 
-Then access in the browser **http://127.0.0.1:8000**
+Session stored in HTTP-only cookies
 
-**structure in STRUCTURE.md**
+Basic authentication system
 
-## Dependencies
+Route protection (login required)
 
-- **fastapi** - Modern web framework
-- **uvicorn** - ASGI server
-- **jinja2** - Template engine
-- **pydantic** - Data validation
-- **python-multipart** - File upload support
+Users can only access their own notes
 
-## Features
+Basic image upload validation
+
+## ✨ Features
 
 ✓ Create, edit and delete notes
 ✓ Upload images for notes
-✓ Customize text color
-✓ User authentication
-✓ SQLite database
+✓ Custom text color
+✓ User authentication (register/login/logout)
+✓ SQLite database (auto-created)
+✓ Protected user data
 ✓ Responsive interface
 
-## Development Notes
+### 📁 Project Notes
 
-- The database is created automatically on first run
-- Passwords are saved with SHA-256 hash
-- Uploaded images are stored in the `uploads/` folder
-- Use `--reload` for development (reloads on each change)
+Database is automatically created on first run
 
-## Troubleshooting
+Images are stored in /uploads
 
-**Error: "Python not found"**
-- Install Python from https://www.python.org/
-- Make sure it's in the Windows PATH
+Static files served via FastAPI
 
-**Error: "Port 8000 already in use"**
-- Use another port: `--port 8001`
-- Or terminate the process using port 8000
+Uses Jinja2 templates
 
-**Virtual environment not active**
-- Make sure to run the correct activation command for your OS
-- In PowerShell, you may need to change the execution policy
+🧠 Future Improvements
 
-## License
+🔐 Replace session system with secure tokens
+
+🗄️ Migrate to PostgreSQL
+
+🧪 Add automated tests
+
+🔍 Search and pagination
+
+📡 REST API
+
+🛠️ Useful Commands
+make run
+make install
+make docker-build
+make docker-run
+make clean
+⚠️ Troubleshooting
+
+Port already in use
+
+--port 8001
+
+Python not found
+
+Install from https://www.python.org/
+
+Virtual environment issues
+
+Check activation command
+
+📄 License
 
 This project is provided as is, without warranties.
